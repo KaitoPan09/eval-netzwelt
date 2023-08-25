@@ -2,99 +2,147 @@ import { Box, useTheme } from "@mui/material";
 import Header from "../../components/Header";
 import { tokens } from "../../theme";
 import React, { useState, useEffect } from "react";
-// import axios from "axios";
+
+import ListSubheader from '@mui/material/ListSubheader';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Collapse from '@mui/material/Collapse';
+import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
+import ArrowDropUpOutlinedIcon from '@mui/icons-material/ArrowDropUpOutlined';
 
 const Home = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode)
+
+    const genColors = [
+      colors.orangeAccent[600],
+      colors.orangeAccent[700],
+      colors.orangeAccent[900],
+    ]
     
-    const url = "https://netzwelt-devtest.azurewebsites.net/Territories/All";
+    // const url = "https://netzwelt-devtest.azurewebsites.net/Territories/All";
     const [data, setData] = useState([]);
 
-    const fetchTerritory = () => {
-        return fetch(url)
-          .then((res) => res.json())
-          .then((d) => setData(d))
-      }
+    useEffect(() => {
+        // const url = "https://netzwelt-devtest.azurewebsites.net/Territories/All";
+        const url = "/fetch-territories";
+        // const url = "http://localhost:3001/fetch-territories";
     
-    
-      useEffect(() => {
-        fetchTerritory();
+        fetch(url, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Fetched data:", data); // Log the fetched data
+            const organizedTerritories = organizeTerritories(data);
+            setData(organizedTerritories);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error); // Log any errors
+          });
       }, []);
+
+      const organizeTerritories = (flatTerritories) => {
+        const territoryMap = {};
+      
+        flatTerritories.data.forEach((territory) => {
+          territoryMap[territory.id] = { ...territory, children: [] };
+        });
+      
+        const rootTerritories = [];
+      
+        flatTerritories.data.forEach((territory) => {
+          if (territory.parent) {
+            territoryMap[territory.parent].children.push(territoryMap[territory.id]);
+          } else {
+            rootTerritories.push(territoryMap[territory.id]);
+          }
+        });
+      
+        return rootTerritories;
+      };
+
+      const [openMap, setOpenMap] = React.useState({});
+
+      const handleClick = (territoryId) => {
+        setOpenMap((prevOpenMap) => ({
+          ...prevOpenMap,
+          [territoryId]: !prevOpenMap[territoryId],
+        }));
+      };
+
+      const renderTerritories = (territories, depth = 1) => {
+        return territories.map((territory) => (
+          <div key={territory.id}>
+            <ListItemButton
+              onClick={() => handleClick(territory.id)}
+              sx={{ 
+                pl: `${depth * 20}px`,
+                bgcolor: genColors[depth - 1] 
+              }}
+            >
+              {territory.children.length > 0 ? (
+                openMap[territory.id] ? (
+                  <ArrowDropUpOutlinedIcon sx={{ mr: '5px' }} />
+                ) : (
+                  <ArrowDropDownOutlinedIcon sx={{ mr: '5px' }} />
+                )
+              ) : null}
+              <ListItemText primary={territory.name} />
+            </ListItemButton>
+            <Collapse in={openMap[territory.id]} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                {renderTerritories(territory.children, depth + 1)}
+              </List>
+            </Collapse>
+          </div>
+        ));
+      };
 
     return (
     <Box m="20px">
         <Box 
             display="flex"
-            justifyContent="space-between"
+            justifyContent="center"
             alignItems="center"
             >
-            <Header title="HOME PAGE" subtitle="Where the Magic Happens" />
+            <Header title="TERRITORIES" subtitle="Here are a list of territories" />
             <Box>
-                {/* <Button
-                    sx={{ backgroundColor: colors.blueAccent[700],
-                        color: colors.gray[100],
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                        padding: "10px 20px"}}
-                    >
-                    <DownloadOutlinedIcon sx={{ mr: "10px" }} />
-                    Download Reports
-                </Button> */}
             </Box>
         </Box>
 
         <center>
-            {data.map((dataObj, index) => {
-            return (
-                <Box
-                sx={{
-                    width: "15em",
-                    backgroundColor: colors.orangeAccent[400],
-                    p: 2,
-                    borderRadius: 10,
-                    marginBlock: 0.5,
-                }}
-                >
-                {dataObj.name}
-                </Box>
-            );
-            })}
-        </center>
+        <List
+            sx={{ width: '100%', maxWidth: 360,
 
-        {/* BODY */}
-        {/* <Box
-            display="grid"
-            gridTemplateColumns="repeat(12, 1fr)"
-            gridAutoRows="140px"
-            gap="20px"
-            > */}
-            {/* ROW 1 */}
-            {/* <Box 
-                gridColumn="span 2" 
-                gridrow="span 2"
-                backgroundColor={colors.primary[400]}
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
+             }}
+            component="nav"
+            aria-labelledby="nested-list-subheader"
+            subheader={
+              <ListSubheader 
+                component="div" 
+                id="nested-list-subheader"
+                sx={{ 
+                  color: colors.orangeAccent[100],
+                  bgcolor: colors.grey[900]
+                 }}
                 >
-                    {data.map((dataObj, index) => {
-                        return (
-                            <Box
-                                sx={{
-                                    width: "15em",
-                                    backgroundColor: colors.orangeAccent[400],
-                                    p: 2,
-                                    borderRadius: 10,
-                                    marginBlock: 10,
-                                }}
-                            >
-                                {dataObj.name}
-                            </Box>
-                        )
-                    })}
-            </Box> */}
-        {/* </Box> */}
+                DROP DOWN MENU
+              </ListSubheader>
+            }
+          >
+            {/* Dynamic rendering of fetched territories */}
+            {data.map((territory) => (
+                <div key={territory.id}>
+                    {renderTerritories([territory])}
+                </div>
+            ))}
+          </List>
+        </center>
     </Box>
     )
 }
