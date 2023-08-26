@@ -1,6 +1,6 @@
 import { ColorModeContext, useMode } from "./theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { Routes, Route} from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Topbar from "./global/Topbar";
 import Home from "./pages/home";
 import Login from "./pages/login";
@@ -15,8 +15,10 @@ function App() {
           <main className="content">
             <Topbar />
             <Routes>
-            <Route path="/" element={<Login />} />
-              <Route path="/home" element={<Home />} />
+              {/* <Route path="/account/login" element={<Login />} /> */}
+              {/* <Route path="/" element={<Navigate to="/account/login" replace />} /> */}
+              <Route path="/account/login" element={<Login />} />
+              <Route path="/home/index" element={<Home />} />
             </Routes>   
           </main>
         </div>

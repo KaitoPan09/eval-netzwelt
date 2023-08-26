@@ -39,8 +39,8 @@ const Login = () => {
             });
             // console.log('Request Body:', JSON.stringify({ username, password }));
 
-            response.ok ? (window.location.href='/home') 
-            : setErrorMessage("Username and/or Password is not Recognized")
+            response.ok ? (window.location.href='/home/index') 
+            : setErrorMessage("Invalid username or password")
         } catch (error) {
             console.error('Error during login:', error);
             setErrorMessage('An error occurred during login');
