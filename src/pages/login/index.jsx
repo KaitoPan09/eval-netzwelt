@@ -21,30 +21,29 @@ const Login = () => {
     };
 
     const handleLogin = async () => {
-        // const username = 'foo';
-        // const password = 'bar';
         const username = document.getElementById('loginUser').value;
         const password = document.getElementById('loginPassword').value;
 
+        console.log('Username:', username);
+        console.log('Password:', password);
+    
         try {
-            // const response = 
-            // await fetch('https://netzwelt-devtest.azurewebsites.net/Account/SignIn', {
-            const response = await fetch('/api/login', {
-                method: "POST",
+            const response = await fetch('http://localhost:3001/', {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({username, password})
+                body: JSON.stringify({ username, password })
             });
-
+            console.log('Request Body:', JSON.stringify({ username, password }));
+    
             if (response.ok) {
                 window.location.href = '/home';
-            }
-            else {
-                console.log('Authentication failed')
+            } else {
+                console.log('Authentication failed');
             }
         } catch (error) {
-            console.error('Error during login:', error)
+            console.error('Error during login:', error);
         }
     }
 
@@ -98,11 +97,14 @@ const Login = () => {
                     variant="outlined" 
                     endIcon={<LoginOutlinedIcon />}
                     color='secondary'
-                    // onClick={handleLogin}
-                    onClick={(e) => {
-                        e.preventDefault();
-                        window.location.href='/home'
+                    onClick={handleLogin}
+                    sx={{
+                        mt: '3ch'
                     }}
+                    // onClick={(e) => {
+                    //     e.preventDefault();
+                    //     window.location.href='/home'
+                    // }}
                     >
                     Login
                 </Button>
