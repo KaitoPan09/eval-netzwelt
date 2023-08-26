@@ -12,7 +12,16 @@ const Topbar = () => {
 
     const location = useLocation();
 
-    const showLogoutIcon = location.pathname !== "/account/login"
+    const authToken = sessionStorage.getItem('authToken');
+    const isAuthenticated = authToken !== null;
+
+    // const showLogoutIcon = location.pathname !== "/account/login"
+    const showLogoutIcon = isAuthenticated;
+    
+    const handleLogout = () => {
+        sessionStorage.removeItem('authToken')
+        window.location.href = '/account/login';
+    }
 
     return (
     <Box 
@@ -31,10 +40,12 @@ const Topbar = () => {
             </IconButton>
             {showLogoutIcon && (
                 <IconButton
-                    onClick={(e) => {
-                        e.preventDefault();
-                        window.location.href='/account/login'
-                    }}>
+                    onClick={handleLogout}
+                    // onClick={(e) => {
+                    //     e.preventDefault();
+                    //     window.location.href='/account/login'
+                    // }}
+                    >
                     <LogoutOutlinedIcon/>
                 </IconButton>
             )}

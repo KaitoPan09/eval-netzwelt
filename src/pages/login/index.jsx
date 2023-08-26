@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Box, Button, Typography } from '@mui/material/';
 import Header from "../../components/Header";
 
@@ -13,8 +13,10 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 
 const Login = () => {
-    const [showPassword, setShowPassword] = React.useState(false);
-    const [errorMessage, setErrorMessage] = React.useState('');
+    // const [showPassword, setShowPassword] = React.useState(false);
+    // const [errorMessage, setErrorMessage] = React.useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -26,8 +28,8 @@ const Login = () => {
         const username = document.getElementById('loginUser').value;
         const password = document.getElementById('loginPassword').value;
 
-        // console.log('Username:', username);
-        // console.log('Password:', password);
+        console.log('Username:', username);
+        console.log('Password:', password);
     
         try {
             const response = await fetch('http://localhost:3001/', {
@@ -39,8 +41,24 @@ const Login = () => {
             });
             // console.log('Request Body:', JSON.stringify({ username, password }));
 
-            response.ok ? (window.location.href='/home/index') 
-            : setErrorMessage("Invalid username or password")
+            // response.ok ? (window.location.href='/home/index') 
+            // : setErrorMessage("Invalid username or password")
+
+            if (response.ok) {
+                // const responseData = await response.json();
+                // const authToken = responseData.token;
+                const authToken = "sessionToken";
+
+                console.log('Received auth token:', authToken);
+
+                sessionStorage.setItem('authToken', authToken);
+
+                console.log('Redirecting to /home/index');
+                window.location.href = '/home/index';
+            } else {
+                console.log('Authentication failed response:', response);
+                setErrorMessage("Invalid username or password");
+            }
         } catch (error) {
             console.error('Error during login:', error);
             setErrorMessage('An error occurred during login');
