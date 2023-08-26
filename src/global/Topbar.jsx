@@ -12,7 +12,7 @@ const Topbar = () => {
 
     const location = useLocation();
 
-    const showLogoutIcon = location.pathname !== "/login"
+    const showLogoutIcon = location.pathname !== "/"
 
     return (
     <Box 
@@ -30,7 +30,11 @@ const Topbar = () => {
                 ) : (<LightModeOutlinedIcon />)}
             </IconButton>
             {showLogoutIcon && (
-                <IconButton>
+                <IconButton
+                    onClick={(e) => {
+                        e.preventDefault();
+                        window.location.href='/'
+                    }}>
                     <LogoutOutlinedIcon/>
                 </IconButton>
             )}

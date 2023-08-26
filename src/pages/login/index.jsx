@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Box, Button} from '@mui/material/';
+import { Box, Button } from '@mui/material/';
+import Header from "../../components/Header";
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -19,6 +20,34 @@ const Login = () => {
         event.preventDefault();
     };
 
+    const handleLogin = async () => {
+        // const username = 'foo';
+        // const password = 'bar';
+        const username = document.getElementById('loginUser').value;
+        const password = document.getElementById('loginPassword').value;
+
+        try {
+            // const response = 
+            // await fetch('https://netzwelt-devtest.azurewebsites.net/Account/SignIn', {
+            const response = await fetch('/api/login', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({username, password})
+            });
+
+            if (response.ok) {
+                window.location.href = '/home';
+            }
+            else {
+                console.log('Authentication failed')
+            }
+        } catch (error) {
+            console.error('Error during login:', error)
+        }
+    }
+
     return (
         <Box 
             sx={{ 
@@ -34,6 +63,7 @@ const Login = () => {
                     alignItems: "center"
                 }}
                 >
+                <Header title="WELCOME!" subtitle="Please enter your credentials" />
                 <TextField
                     id="loginUser"
                     label="Username"
@@ -68,6 +98,11 @@ const Login = () => {
                     variant="outlined" 
                     endIcon={<LoginOutlinedIcon />}
                     color='secondary'
+                    // onClick={handleLogin}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        window.location.href='/home'
+                    }}
                     >
                     Login
                 </Button>

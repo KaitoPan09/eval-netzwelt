@@ -37,12 +37,12 @@ const Home = () => {
         })
           .then((response) => response.json())
           .then((data) => {
-            console.log("Fetched data:", data); // Log the fetched data
+            console.log("Fetched data:", data);
             const organizedTerritories = organizeTerritories(data);
             setData(organizedTerritories);
           })
           .catch((error) => {
-            console.error("Error fetching data:", error); // Log any errors
+            console.error("Error fetching data:", error);
           });
       }, []);
 

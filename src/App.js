@@ -15,8 +15,9 @@ function App() {
           <main className="content">
             <Topbar />
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Login />} />
+              <Route path="/home" element={<Home />} />
+              {/* <Route path="/login" element={<Login />} /> */}
             </Routes>   
           </main>
         </div>
