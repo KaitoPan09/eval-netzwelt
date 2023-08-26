@@ -132,6 +132,9 @@ export const themeSetting = (mode) => {
                     secondary: {
                         main: colors.orangeAccent[500],
                     },
+                    tertiary: {
+                        main: colors.greenAccent[500],
+                    },
                     neutral: {
                         dark: colors.grey[700],
                         main: colors.grey[500],
@@ -146,6 +149,9 @@ export const themeSetting = (mode) => {
                     },
                     secondary: {
                         main: colors.orangeAccent[500],
+                    },
+                    tertiary: {
+                        main: colors.greenAccent[500],
                     },
                     neutral: {
                         dark: colors.grey[700],

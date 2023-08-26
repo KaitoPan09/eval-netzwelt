@@ -3,6 +3,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { Routes, Route} from "react-router-dom";
 import Topbar from "./global/Topbar";
 import Home from "./pages/home";
+import Login from "./pages/login";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -15,6 +16,7 @@ function App() {
             <Topbar />
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
             </Routes>   
           </main>
         </div>
