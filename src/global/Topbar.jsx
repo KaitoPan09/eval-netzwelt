@@ -4,18 +4,17 @@ import { ColorModeContext, } from "../theme";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import { useLocation } from "react-router-dom";
 
 const Topbar = () => {
     const theme = useTheme();
     const colorMode = useContext(ColorModeContext);
 
-    const location = useLocation();
-
+    // refers to session token for logout
     const authToken = sessionStorage.getItem('authToken');
     const isAuthenticated = authToken !== null;
 
-    // const showLogoutIcon = location.pathname !== "/account/login"
+    console.log("Is authenticated:", isAuthenticated);
+
     const showLogoutIcon = isAuthenticated;
     
     const handleLogout = () => {
@@ -24,28 +23,19 @@ const Topbar = () => {
     }
 
     return (
-    <Box 
-        display="flex" 
-        justifyContent="space-between" 
-        p={2}>
-        <Box 
-            >
+    <Box display="flex" justifyContent="space-between" p={2}>
+        <Box>
         </Box>
-
         <Box display="flex">
+            {/* toggles light and dark mode */}
             <IconButton onClick={colorMode.toggleColorMode}>
                 {theme.palette.mode === "dark" ? (
-                    <DarkModeOutlinedIcon />
+                <DarkModeOutlinedIcon />
                 ) : (<LightModeOutlinedIcon />)}
             </IconButton>
+            {/* logout icon visibility */}
             {showLogoutIcon && (
-                <IconButton
-                    onClick={handleLogout}
-                    // onClick={(e) => {
-                    //     e.preventDefault();
-                    //     window.location.href='/account/login'
-                    // }}
-                    >
+                <IconButton onClick={handleLogout}>
                     <LogoutOutlinedIcon/>
                 </IconButton>
             )}

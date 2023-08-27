@@ -21,53 +21,51 @@ const Home = () => {
       colors.orangeAccent[900],
     ]
     
-    // const url = "https://netzwelt-devtest.azurewebsites.net/Territories/All";
-    const [data, setData] = useState([]);
+    const [data, setData] = useState([]); // holds the fetched data
 
     useEffect(() => {
-        // const url = "https://netzwelt-devtest.azurewebsites.net/Territories/All";
-        const url = "/fetch-territories";
-        // const url = "http://localhost:3001/fetch-territories";
-    
+        const url = "/fetch-territories"; // territory fetch from backend
+        
         fetch(url, {
           method: "GET",
           headers: {
             Accept: "application/json",
           },
         })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Fetched data:", data);
-            const organizedTerritories = organizeTerritories(data);
-            setData(organizedTerritories);
-          })
-          .catch((error) => {
-            console.error("Error fetching data:", error);
-          });
-      }, []);
 
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Fetched data:", data);
+          const organizedTerritories = organizeTerritories(data);
+          setData(organizedTerritories);
+        })
+
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+      }, []);
+      
+      // organize territoy
       const organizeTerritories = (flatTerritories) => {
         const territoryMap = {};
-      
         flatTerritories.data.forEach((territory) => {
           territoryMap[territory.id] = { ...territory, children: [] };
         });
-      
+        
         const rootTerritories = [];
-      
+        
         flatTerritories.data.forEach((territory) => {
-          if (territory.parent) {
-            territoryMap[territory.parent].children.push(territoryMap[territory.id]);
-          } else {
-            rootTerritories.push(territoryMap[territory.id]);
-          }
-        });
+          territory.parent
+            ? territoryMap[territory.parent].children.push(territoryMap[territory.id])
+            : rootTerritories.push(territoryMap[territory.id]);
+          });
       
         return rootTerritories;
       };
 
       const [openMap, setOpenMap] = React.useState({});
 
+      // Drop down list handle
       const handleClick = (territoryId) => {
         setOpenMap((prevOpenMap) => ({
           ...prevOpenMap,
@@ -75,6 +73,7 @@ const Home = () => {
         }));
       };
 
+      // Renders list
       const renderTerritories = (territories, depth = 1) => {
         return territories.map((territory) => (
           <div key={territory.id}>
@@ -105,42 +104,35 @@ const Home = () => {
 
     return (
     <Box m="20px">
-        <Box 
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            >
-            <Header title="TERRITORIES" subtitle="Here are a list of territories" />
-            <Box>
-            </Box>
-        </Box>
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <Header title="TERRITORIES" subtitle="Here are a list of territories" />
+      </Box>
 
-        <center>
+      <center>
         <List
-            sx={{ width: '100%', maxWidth: 360 }}
-            component="nav"
-            aria-labelledby="nested-list-subheader"
-            subheader={
-              <ListSubheader 
-                component="div" 
-                id="nested-list-subheader"
-                sx={{ 
-                  color: colors.orangeAccent[100],
-                  bgcolor: colors.grey[900]
-                 }}
-                >
-                DROP DOWN MENU
-              </ListSubheader>
+          sx={{ width: '100%', maxWidth: 360 }}
+          component="nav"
+          aria-labelledby="subHeader"
+          subheader={
+            <ListSubheader 
+              component="div" 
+              id="subHeader"
+              sx={{ 
+                color: colors.orangeAccent[100],
+                bgcolor: colors.grey[900]
+              }}
+              >
+              DROP DOWN MENU
+            </ListSubheader>
             }
-          >
-            {/* Dynamic rendering of fetched territories */}
-            {data.map((territory) => (
+            >
+              {data.map((territory) => (
                 <div key={territory.id}>
-                    {renderTerritories([territory])}
+                  {renderTerritories([territory])}
                 </div>
-            ))}
-          </List>
-        </center>
+                ))}
+        </List>
+      </center>
     </Box>
     )
 }

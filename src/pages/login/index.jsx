@@ -13,25 +13,16 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 
 const Login = () => {
-    // const [showPassword, setShowPassword] = React.useState(false);
-    // const [errorMessage, setErrorMessage] = React.useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-
     const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-    // const handleMouseDownPassword = (event) => {
-    //     event.preventDefault();
-    // };
 
     const handleLogin = async () => {
         const username = document.getElementById('loginUser').value;
         const password = document.getElementById('loginPassword').value;
-
-        console.log('Username:', username);
-        console.log('Password:', password);
     
         try {
+            // Sends POST request to backend
             const response = await fetch('http://localhost:3001/', {
                 method: 'POST',
                 headers: {
@@ -39,30 +30,20 @@ const Login = () => {
                 },
                 body: JSON.stringify({ username, password })
             });
-            // console.log('Request Body:', JSON.stringify({ username, password }));
-
-            // response.ok ? (window.location.href='/home/index') 
-            // : setErrorMessage("Invalid username or password")
 
             if (response.ok) {
-                // const responseData = await response.json();
-                // const authToken = responseData.token;
-                const authToken = "sessionToken";
-
-                console.log('Received auth token:', authToken);
-
-                sessionStorage.setItem('authToken', authToken);
-
-                console.log('Redirecting to /home/index');
+                console.log('Authentication success:', response);
+                const authToken = "sessionToken"; // token name, not secure for testing only
+                sessionStorage.setItem('authToken', authToken); // adds session token
                 window.location.href = '/home/index';
             } else {
-                console.log('Authentication failed response:', response);
+                console.log('Authentication failed:', response);
                 setErrorMessage("Invalid username or password");
             }
         } catch (error) {
             console.error('Error during login:', error);
             setErrorMessage('An error occurred during login');
-          }
+        }
     }
 
     return (
@@ -73,13 +54,7 @@ const Login = () => {
                 alignItems: "center",
                 height: '50vh',
                 }}>
-            <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center"
-                }}
-                >
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <Header title="WELCOME!" subtitle="Please enter your credentials" />
                 <TextField
                     id="loginUser"
@@ -95,27 +70,26 @@ const Login = () => {
                     variant="outlined"
                     color='secondary'
                     >
-                    <InputLabel htmlFor="loginPassword">Password</InputLabel>
-                    <OutlinedInput
-                        id="loginPassword"
-                        type={showPassword ? 'text' : 'password'}
-                        endAdornment={
-                        <InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                // onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                                >
-                                {showPassword ? <VisibilityOff /> : <Visibility />}
-                            </IconButton>
-                        </InputAdornment>
-                        }
-                        label="Password"
-                        onKeyDown={(event) => 
-                            event.key === "Enter" ? handleLogin() : null
-                        }
-                    />
+                        <InputLabel htmlFor="loginPassword">Password</InputLabel>
+                        <OutlinedInput
+                            id="loginPassword"
+                            type={showPassword ? 'text' : 'password'}
+                            endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggleVisibility"
+                                    onClick={handleClickShowPassword}
+                                    edge="end"
+                                    >
+                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                            }
+                            label="Password"
+                            onKeyDown={(event) => 
+                                event.key === "Enter" ? handleLogin() : null
+                            }
+                        />
                 </FormControl>
                 <Typography color="error">{errorMessage}</Typography>
                 <Button 
@@ -123,13 +97,7 @@ const Login = () => {
                     endIcon={<LoginOutlinedIcon />}
                     color='secondary'
                     onClick={handleLogin}
-                    sx={{
-                        mt: '3ch'
-                    }}
-                    // onClick={(e) => {
-                    //     e.preventDefault();
-                    //     window.location.href='/home'
-                    // }}
+                    sx={{ mt: '3ch'}}
                     >
                     Login
                 </Button>
