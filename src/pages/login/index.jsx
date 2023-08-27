@@ -20,16 +20,54 @@ const Login = () => {
     const handleLogin = async () => {
         const username = document.getElementById('loginUser').value;
         const password = document.getElementById('loginPassword').value;
-    
+
+        // try {
+        //     // Sends POST request to backend
+        //     const response = await fetch('http://localhost:3001/', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify({ username, password })
+        //     });
+
+        //     console.log('Response from server:', response);
+
+        //     if (response.ok) {
+        //         console.log('Authentication success:', response);
+        //         const authToken = "sessionToken"; // token name, not secure for testing only
+        //         sessionStorage.setItem('authToken', authToken); // adds session token
+        //         window.location.href = '/home/index';
+        //     } else {
+        //         console.log('Authentication failed:', response);
+        //         setErrorMessage("Invalid username or password");
+        //     }
+        // } 
+        
         try {
-            // Sends POST request to backend
-            const response = await fetch('http://localhost:3001/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password })
-            });
+            let response;
+
+            // proxy setup locally
+            if (process.env.NODE_ENV === 'development') {
+                response = await fetch('http://localhost:3001/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+            } else {
+                // Use the external URL in deployment
+                response = await fetch('https://netzwelt-devtest.azurewebsites.net/Account/SignIn', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+            }
+
+            console.log('Response from server:', response);
 
             if (response.ok) {
                 console.log('Authentication success:', response);
@@ -40,7 +78,8 @@ const Login = () => {
                 console.log('Authentication failed:', response);
                 setErrorMessage("Invalid username or password");
             }
-        } catch (error) {
+        } 
+        catch (error) {
             console.error('Error during login:', error);
             setErrorMessage('An error occurred during login');
         }

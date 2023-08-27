@@ -8,8 +8,18 @@ const PORT = process.env.PORT || 3001;
 app.use(express.json());
 app.use(cors());
 
+// Vercel addition
+const allowedOrigins 
+= ['https://eval-netzwelt.vercel.app', 'http://localhost:3000'];
+
+app.use(express.json());
+app.use(cors({
+  origin: allowedOrigins,
+}));
+
 // Handles user auth
-app.post('/', async (req, res) => {
+// app.post('/', async (req, res) => {
+app.post('/api/', async (req, res) => {
   const { username, password } = req.body;
   
   try {
