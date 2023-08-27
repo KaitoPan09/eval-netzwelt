@@ -24,18 +24,27 @@ const Topbar = () => {
 
     return (
     <Box display="flex" justifyContent="space-between" p={2}>
-        <Box>
+        <Box sx={{ height: "48px" }}>
+            {/* <img src="/netlogo.png" alt="Logo" style={{ width: "48px"}}/> */}
+            <img
+                src="/netlogo.png"
+                alt="Logo"
+                style={{
+                    width: "48px",
+                    filter: theme.palette.mode === "dark" ? "invert(1)" : "none",
+                }}
+            />
         </Box>
         <Box display="flex">
             {/* toggles light and dark mode */}
-            <IconButton onClick={colorMode.toggleColorMode}>
+            <IconButton onClick={colorMode.toggleColorMode} size="large">
                 {theme.palette.mode === "dark" ? (
                 <DarkModeOutlinedIcon />
                 ) : (<LightModeOutlinedIcon />)}
             </IconButton>
             {/* logout icon visibility */}
             {showLogoutIcon && (
-                <IconButton onClick={handleLogout}>
+                <IconButton onClick={handleLogout} size="large">
                     <LogoutOutlinedIcon/>
                 </IconButton>
             )}
