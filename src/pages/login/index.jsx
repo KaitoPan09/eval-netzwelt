@@ -58,13 +58,14 @@ const Login = () => {
                 });
             } else {
                 // Use the external URL in deployment
-                response = await fetch('https://netzwelt-devtest.azurewebsites.net/Account/SignIn', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, password })
-                });
+                // response = await fetch('https://netzwelt-devtest.azurewebsites.net/Account/SignIn', {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //     },
+                //     body: JSON.stringify({ username, password })
+                // });
+                window.location.href = '/home/index';
             }
 
             console.log('Response from server:', response);
