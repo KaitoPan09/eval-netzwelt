@@ -18,7 +18,6 @@ app.use(cors({
 }));
 
 // Handles user auth
-// app.post('/', async (req, res) => {
 app.post('/', async (req, res) => {
   const { username, password } = req.body;
   
