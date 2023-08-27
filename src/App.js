@@ -25,12 +25,9 @@ function App() {
               <Route path="/account/login" element={isAuthenticated ? <Home /> : <Login />} />
               <Route path="/login" element={isAuthenticated ? <Home /> : <Login />} />
               <Route path="/" element={isAuthenticated ? <Home /> : <Login />} />
-              {/* <Route path="/home" element={isAuthenticated ? <Home /> : <Login />} />
+              <Route path="/home" element={isAuthenticated ? <Home /> : <Login />} />
               <Route path="/index" element={isAuthenticated ? <Home /> : <Login />} />
-              <Route path="/home/index" element={isAuthenticated ? <Home /> : <Login />} /> */}
-              <Route path="/home" element={<Home />}/>
-              <Route path="/index" element={<Home />}/>
-              <Route path="/home/index" element={<Home />}/>
+              <Route path="/home/index" element={isAuthenticated ? <Home /> : <Login />} />
             </Routes>   
           </main>
         </div>
