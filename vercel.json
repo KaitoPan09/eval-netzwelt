@@ -1,0 +1,14 @@
+{
+    "version": 2,
+    "builds": [
+    {
+        "src": "server.js",
+        "use": "@vercel/node"
+    }
+    ],
+    "routes": [
+    { "src": "/api/accout/signin", "dest": "server.js" },
+    { "src": "/api/fetch-territories", "dest": "server.js" },
+    { "src": "/", "dest": "server.js" }
+    ]
+}
