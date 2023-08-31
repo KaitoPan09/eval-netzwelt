@@ -77,8 +77,8 @@
 // });
 
 const express = require('express');
-
-// const cors = require('cors'); 
+// const fetch = require('node-fetch');
+const cors = require('cors'); 
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -87,12 +87,19 @@ const PORT = process.env.PORT || 3001;
 app.use(express.json());
 app.use(cors());
 
+const allowedOrigins = ['https://eval-netzwelt.vercel.app', 'http://localhost:3000'];
+app.use(cors({
+  origin: allowedOrigins,
+}));
+
 // Handles user auth
 app.post('/', async (req, res) => {
   const { username, password } = req.body;
   
   try {
     console.log('Fetching SignIn...');
+
+    const fetch = await import('node-fetch');
 
     // sending POST to external API
     const response = 
