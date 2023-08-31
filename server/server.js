@@ -52,6 +52,9 @@ app.get('/fetch-territories', async (req, res) => {
     // sending GET to external API
     const response = 
     await fetch.default('https://netzwelt-devtest.azurewebsites.net/Territories/All');
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
     const data = await response.json();
 
     console.log('GET:', data); 

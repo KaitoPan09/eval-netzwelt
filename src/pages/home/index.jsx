@@ -23,27 +23,53 @@ const Home = () => {
     
     const [data, setData] = useState([]); // holds the fetched data
 
-    useEffect(() => {
-        const url = "/fetch-territories"; // territory fetch from backend
+    // useEffect(() => {
+    //     const url = "/fetch-territories"; // territory fetch from backend
         
-        fetch(url, {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-          },
-        })
+    //     fetch(url, {
+    //       method: "GET",
+    //       headers: {
+    //         Accept: "application/json",
+    //       },
+    //     })
 
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Fetched data:", data);
-          const organizedTerritories = organizeTerritories(data);
-          setData(organizedTerritories);
-        })
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       console.log("Fetched data:", data);
+    //       const organizedTerritories = organizeTerritories(data);
+    //       setData(organizedTerritories);
+    //     })
 
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-        });
-      }, []);
+    //     .catch((error) => {
+    //       console.error("Error fetching data:", error);
+    //     });
+    //   }, []);
+
+    useEffect(() => {
+      const url = "/fetch-territories"; // territory fetch from backend
+      
+      fetch(url, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched data:", data);
+        const organizedTerritories = organizeTerritories(data);
+        setData(organizedTerritories);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+    }, []);
+    
       
       // organize territoy
       const organizeTerritories = (flatTerritories) => {
